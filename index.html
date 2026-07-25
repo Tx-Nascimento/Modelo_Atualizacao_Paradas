@@ -960,9 +960,9 @@ async function abrirParada() {
             <b>Setor:</b> ${item.setor}<br>
             <b>Data parada:</b> ${item.data_parada}<br>
             <b>Motivo:</b> ${item.motivo}<br>
-            <b>Início:</b> ${item.hora_inicio || '-'}<br>
-            <b>Fim: ${item.data_fim || item.data_parada} ${item.hora_fim}<br>
-            <b>Duração:</b> ${minutosParaHora(item.duracao_min || 0)}<br>
+            <b>Início:</b> ${item.hora_inicio.slice(0, 5)}<br>
+            <b>Fim:</b> ${item.data_fim || item.data_parada} ${item.hora_fim.slice(0, 5)}<br>
+            <b>Duração:</b> ${minutosParaHora(item.duracao_min)}<br>
             <b>Observação:</b> ${item.observacao || '-'}<br>
             <b>Usuário:</b> ${item.usuario_nome}
             ${perfil.admin ? `<br><br><button class="btn-danger" onclick="excluirParadaAdmin('${item.id}')">Excluir parada</button>` : ''}
@@ -1239,14 +1239,30 @@ async function finalizarParada(id, dataInicio, horaInicio) {
     }
 
   function calcularDuracaoMin(dataInicio, horaInicio, dataFim, horaFim) {
+    const [anoInicio, mesInicio, diaInicio] = dataInicio.split('-').map(Number);
+    const [horaI, minutoI] = horaInicio.split(':').map(Number);
 
-    const inicio = new Date(`${dataInicio}T${horaInicio}:00`);
-    const fim = new Date(`${dataFim}T${horaFim}:00`);
+    const [anoFim, mesFim, diaFim] = dataFim.split('-').map(Number);
+    const [horaF, minutoF] = horaFim.split(':').map(Number);
+
+    const inicio = new Date(
+        anoInicio,
+        mesInicio - 1,
+        diaInicio,
+        horaI,
+        minutoI
+    );
+
+    const fim = new Date(
+        anoFim,
+        mesFim - 1,
+        diaFim,
+        horaF,
+        minutoF
+    );
 
     return Math.floor((fim - inicio) / 60000);
-
-}
-    function minutosParaHora(min) {
+}    function minutosParaHora(min) {
       const total = Number(min || 0);
       const horas = Math.floor(total / 60);
       const minutos = total % 60;
