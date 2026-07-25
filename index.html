@@ -961,7 +961,8 @@ async function abrirParada() {
             <b>Data parada:</b> ${item.data_parada}<br>
             <b>Motivo:</b> ${item.motivo}<br>
             <b>Início:</b> ${item.hora_inicio.slice(0, 5)}<br>
-            <b>Fim:</b> ${item.data_fim || item.data_parada} ${item.hora_fim.slice(0, 5)}<br>
+            <b>Data fim:</b> ${item.data_fim || item.data_parada}<br>
+            <b>Hora fim:</b> ${item.hora_fim.slice(0, 5)}<br>            
             <b>Duração:</b> ${minutosParaHora(item.duracao_min)}<br>
             <b>Observação:</b> ${item.observacao || '-'}<br>
             <b>Usuário:</b> ${item.usuario_nome}
