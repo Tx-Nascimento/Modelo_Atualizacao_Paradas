@@ -332,6 +332,13 @@ let setoresCache = [];
 let maquinasCache = [];
 let sincronizando = false;
 let modoOffline = false;
+const DB_NOME = 'paradas_offline_db';
+const DB_VERSAO = 4;
+const STORE_CRIACOES = 'criacoes_pendentes';
+const STORE_FINALIZACOES = 'finalizacoes_pendentes';
+const STORE_CREDENCIAIS = 'credenciais_offline';
+const STORE_CONFIG = 'config_cache';
+const STORE_SESSAO = 'sessao_local';
 
     document.getElementById('dataParada').value = hojeISO();
     document.getElementById('filtroInicioHistorico').value = primeiroDiaMes();
@@ -1210,14 +1217,6 @@ async function atualizarStatusConexao() {
    ARMAZENAMENTO OFFLINE — IndexedDB
    Bancos: criacoes_pendentes, finalizacoes_pendentes, credenciais_offline, config_cache, sessao_local
    ========================================================= */
-const DB_NOME = 'paradas_offline_db';
-const DB_VERSAO = 4;
-const STORE_CRIACOES = 'criacoes_pendentes';
-const STORE_FINALIZACOES = 'finalizacoes_pendentes';
-const STORE_CREDENCIAIS = 'credenciais_offline';
-const STORE_CONFIG = 'config_cache';
-const STORE_SESSAO = 'sessao_local';
-
 let dbPromise = null;
 
 function abrirDB() {
