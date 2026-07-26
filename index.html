@@ -372,6 +372,8 @@ const STORE_SESSAO = 'sessao_local';
           // Erro de credencial inválida vindo do servidor: nunca cair para offline aqui,
           // pois isso permitiria adivinhar senha contra o cache local indefinidamente
           // sem o servidor saber. Se a mensagem indicar problema de rede, tentamos offline.
+	console.log(error);
+alert(error.message);
           const pareceErroDeRede = /fetch|network|failed to fetch|NetworkError/i.test(error.message || '');
 
           if (pareceErroDeRede) {
