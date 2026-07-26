@@ -517,13 +517,18 @@ alert(error.message);
         document.getElementById('btnAdmin').classList.add('hidden');
       }
 
-      configurarNovaParadaPorPerfil();
-
-      if (!modoOffline) {
-        carregarAbertas();
-        carregarHistorico();
-        carregarDashboard();
-      } else {
+      configurarNovaParadaPorPerfil()
+    .then(() => {
+        if (!modoOffline) {
+            carregarAbertas();
+            carregarHistorico();
+            carregarDashboard();
+        }
+    })
+    .catch(err => {
+        console.error('Erro ao carregar o app:', err);
+    });
+ else {
         // Em sessão offline não há leitura ao vivo do servidor; mostramos
         // apenas o painel de pendências locais nas telas relevantes.
         atualizarPainelPendenciasAbertas();
@@ -660,7 +665,22 @@ async function excluirParadaAdmin(id) {
     await carregarHistorico();
     await carregarDashboard();
 }
+async function carregarSetoresAdmin() {
+    await carregarSetores();
 
+    const selectUsuario = document.getElementById('novoSetor');
+    const selectMaquina = document.getElementById('novaMaquinaSetor');
+
+    const opcoes = setoresCache
+        .map(s => `<option value="${s.nome}">${s.nome}</option>`)
+        .join('');
+
+    selectUsuario.innerHTML =
+        '<option value="">Selecione o setor</option>' + opcoes;
+
+    selectMaquina.innerHTML =
+        '<option value="">Selecione o setor</option>' + opcoes;
+}
 
     async function criarUsuario() {
       const nome = document.getElementById('novoNome').value.trim();
@@ -1094,9 +1114,9 @@ async function abrirParada() {
             <b>Setor:</b> ${item.setor}<br>
             <b>Data parada:</b> ${item.data_parada}<br>
             <b>Motivo:</b> ${item.motivo}<br>
-            <b>Início:</b> ${item.hora_inicio.slice(0, 5)}<br>
+            <b>Início:</b> ${item.hora_inicio ? item.hora_inicio.slice(0, 5) : '-'}<br>
             <b>Data fim:</b> ${item.data_fim || item.data_parada}<br>
-            <b>Hora fim:</b> ${item.hora_fim.slice(0, 5)}<br>            
+            <b>Hora fim:</b> ${item.hora_fim ? item.hora_fim.slice(0, 5) : '-'}<br>            
             <b>Duração:</b> ${minutosParaHora(item.duracao_min)}<br>
             <b>Observação:</b> ${item.observacao || '-'}<br>
             <b>Usuário:</b> ${item.usuario_nome}
@@ -1942,10 +1962,12 @@ async function carregarSetores() {
     .order('nome', { ascending: true });
 
   if (error) {
+    console.error('Erro ao carregar setores:', error);
+    alert(`Erro ao carregar setores: ${error.message}`);
+
     setoresCache = await buscarCacheConfig('setores') || [];
     return setoresCache;
-  }
-
+}
   setoresCache = data || [];
   await salvarCacheConfig('setores', setoresCache);
   return setoresCache;
@@ -1966,10 +1988,12 @@ async function carregarMaquinasBase() {
   const { data, error } = await query;
 
   if (error) {
+    console.error('Erro ao carregar máquinas:', error);
+    alert(`Erro ao carregar máquinas: ${error.message}`);
+
     maquinasCache = await buscarCacheConfig('maquinas') || [];
     return maquinasCache;
-  }
-
+}
   maquinasCache = data || [];
   await salvarCacheConfig('maquinas', maquinasCache);
   return maquinasCache;
