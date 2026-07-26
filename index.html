@@ -341,7 +341,7 @@ let modoOffline = false;
 
     async function login() {
       const email = document.getElementById('email').value.trim();
-      const senha = document.getElementById('senha').value.trim();
+      const senha = document.getElementById('senha').value;
       const msg = document.getElementById('loginMsg');
       msg.innerHTML = '';
 
@@ -417,7 +417,7 @@ let modoOffline = false;
 
         // Login online bem-sucedido: atualiza o cache offline com o perfil mais
         // recente e a senha que acabou de funcionar, para permitir login offline depois.
-        const senhaDigitada = document.getElementById('senha').value.trim();
+        const senhaDigitada = document.getElementById('senha').value;
         if (senhaDigitada) {
           await salvarCredencialOffline(perfil.email, senhaDigitada, perfil);
         }
