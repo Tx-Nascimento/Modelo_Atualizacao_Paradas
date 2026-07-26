@@ -523,17 +523,13 @@ alert(error.message);
             carregarAbertas();
             carregarHistorico();
             carregarDashboard();
+        } else {
+            atualizarPainelPendenciasAbertas();
         }
     })
     .catch(err => {
         console.error('Erro ao carregar o app:', err);
     });
- else {
-        // Em sessão offline não há leitura ao vivo do servidor; mostramos
-        // apenas o painel de pendências locais nas telas relevantes.
-        atualizarPainelPendenciasAbertas();
-      }
-
       atualizarStatusConexao();
       pedirPermissaoNotificacaoWeb();
 
