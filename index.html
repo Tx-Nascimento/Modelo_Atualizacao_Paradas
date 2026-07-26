@@ -536,6 +536,130 @@ alert(error.message);
         sincronizarFilaOffline();
       }
     }
+function mostrarTela(idTela) {
+    const telas = [
+        'novaParadaTela',
+        'abertasTela',
+        'historicoTela',
+        'dashboardTela',
+        'adminTela'
+    ];
+
+    telas.forEach(id => {
+        const tela = document.getElementById(id);
+
+        if (tela) {
+            tela.classList.toggle('hidden', id !== idTela);
+        }
+    });
+}
+
+function mostrarAdminAba(idAba) {
+    const abas = [
+        'abaCriarUsuario',
+        'abaUsuarios',
+        'abaCadastros'
+    ];
+
+    abas.forEach(id => {
+        const aba = document.getElementById(id);
+
+        if (aba) {
+            aba.classList.toggle('hidden', id !== idAba);
+        }
+    });
+}
+
+async function criarSetor() {
+    const nome = document.getElementById('novoNomeSetor').value.trim();
+    const msg = document.getElementById('setorMsg');
+
+    msg.innerHTML = '';
+
+    if (!nome) {
+        msg.innerHTML = '<div class="erro">Informe o nome do setor.</div>';
+        return;
+    }
+
+    const { error } = await client
+        .from('setores')
+        .insert([{ nome, ativo: true }]);
+
+    if (error) {
+        msg.innerHTML = `<div class="erro">${error.message}</div>`;
+        return;
+    }
+
+    msg.innerHTML = '<div class="ok">Setor criado com sucesso.</div>';
+    document.getElementById('novoNomeSetor').value = '';
+
+    await carregarSetores();
+    await configurarNovaParadaPorPerfil();
+}
+
+async function criarMaquina() {
+    const codigo = document.getElementById('novaMaquinaCodigo').value.trim();
+    const nome = document.getElementById('novaMaquinaNome').value.trim();
+    const setor = document.getElementById('novaMaquinaSetor').value;
+    const msg = document.getElementById('maquinaMsg');
+
+    msg.innerHTML = '';
+
+    if (!codigo || !nome || !setor) {
+        msg.innerHTML = '<div class="erro">Preencha código, nome e setor.</div>';
+        return;
+    }
+
+    const { error } = await client
+        .from('maquinas')
+        .insert([{
+            codigo,
+            nome,
+            setor,
+            ativa: true
+        }]);
+
+    if (error) {
+        msg.innerHTML = `<div class="erro">${error.message}</div>`;
+        return;
+    }
+
+    msg.innerHTML = '<div class="ok">Máquina criada com sucesso.</div>';
+
+    document.getElementById('novaMaquinaCodigo').value = '';
+    document.getElementById('novaMaquinaNome').value = '';
+    document.getElementById('novaMaquinaSetor').value = '';
+
+    await carregarMaquinasBase();
+    await configurarNovaParadaPorPerfil();
+}
+
+async function excluirParadaAdmin(id) {
+    if (!perfil?.admin) {
+        alert('Apenas administradores podem excluir paradas.');
+        return;
+    }
+
+    const confirmar = confirm('Deseja realmente excluir esta parada?');
+
+    if (!confirmar) return;
+
+    const { error } = await client
+        .from('paradas')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        alert(`Erro ao excluir: ${error.message}`);
+        return;
+    }
+
+    alert('Parada excluída com sucesso.');
+
+    await carregarAbertas();
+    await carregarHistorico();
+    await carregarDashboard();
+}
 
 
     async function criarUsuario() {
