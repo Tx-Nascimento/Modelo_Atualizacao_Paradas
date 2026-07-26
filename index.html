@@ -1057,9 +1057,8 @@ async function abrirParada() {
 
     async function carregarHistorico() {
       const lista = document.getElementById('listaHistorico');
-      const inicio = document.getElementById('filtroInicioHistorico').value;
-      const fim = document.getElementById('filtroFimHistorico').value;
-
+      const inicio = document.getElementById('filtroInicioHistorico').value || primeiroDiaMes();
+      const fim = document.getElementById('filtroFimHistorico').value || hojeISO();
       let query = client
         .from('paradas')
         .select('*')
@@ -1188,9 +1187,8 @@ async function finalizarParada(id, dataInicio, horaInicio) {
 }
 
     async function carregarDashboard() {
-      const inicio = document.getElementById('filtroInicioDash').value;
-      const fim = document.getElementById('filtroFimDash').value;
-
+      const inicio = document.getElementById('filtroInicioDash').value || primeiroDiaMes();
+      const fim = document.getElementById('filtroFimDash').value || hojeISO();
       let query = client
         .from('paradas')
         .select('*')
@@ -1941,7 +1939,6 @@ async function carregarSetores() {
   const { data, error } = await client
     .from('setores')
     .select('*')
-    .eq('ativo', true)
     .order('nome', { ascending: true });
 
   if (error) {
