@@ -332,6 +332,8 @@ let setoresCache = [];
 let maquinasCache = [];
 let sincronizando = false;
 let modoOffline = false;
+let dbPromise = null;
+
 const DB_NOME = 'paradas_offline_db';
 const DB_VERSAO = 4;
 const STORE_CRIACOES = 'criacoes_pendentes';
@@ -1219,8 +1221,6 @@ async function atualizarStatusConexao() {
    ARMAZENAMENTO OFFLINE — IndexedDB
    Bancos: criacoes_pendentes, finalizacoes_pendentes, credenciais_offline, config_cache, sessao_local
    ========================================================= */
-let dbPromise = null;
-
 function abrirDB() {
   if (dbPromise) return dbPromise;
 
