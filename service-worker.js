@@ -1,4 +1,4 @@
-const CACHE_NAME = "paradas-v2";
+const CACHE_NAME = "paradas-v6";
 const urlsToCache = [
   "/",
   "/index.html",
